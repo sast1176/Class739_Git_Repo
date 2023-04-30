@@ -1,0 +1,19 @@
+  .jumbotron {
+    background-color: #007bff;
+    color: #fff;
+  }
+  .display-4 {
+    font-size: 3rem;
+    font-weight: 300;
+  }
+  .lead {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  #hero {
+    width: 100%;
+    height: 100vh;
+    background: url(../hero-bg.jpg) top right no-repeat;
+    background-size: cover;
+    position: relative;
+}

@@ -1,0 +1,141 @@
+<table ngbTable class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>User Type</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users" ngbTr>
+            <td>{{ user.fullName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phoneNumber }}</td>
+            <td>{{ user.userType}}</td>
+            <td><button type="button" class="btn btn-warning"(click)="goToUserEquipmentList(user.id)">Equipment List</button>
+                <td><button class="btn btn-success"  data-toggle="modal" data-target="#updateModalCenter" (click)="setData(user)">Update</button></td>
+                <td><button class="btn btn-danger" (click) = "deleteUser(user.id)">Delete</button></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-target="#exampleModalCenter" data-toggle="modal">
+      Add Users</button>
+  </div>
+     
+    <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">User Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" class="form-control" id="fullName" name="fullName" [(ngModel)]="userDto.fullName"  #fullName="ngModel" required [class.is-invalid] = "fullName.invalid && fullName.touched">
+              <span class="text-danger"
+              *ngIf="(fullName.touched || userForm.submitted) && fullName.errors?.['required']">
+              FullName Name is required
+          </span>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="userDto.email" required  #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [class.is-invalid] = "email.invalid && email.touched">
+              <span class="text-danger"
+              *ngIf="(email.touched || userForm.submitted) && email.errors?.['required']">
+              Email is required
+          </span>
+          <span class="text-danger" *ngIf="email.errors?.['pattern']">Invalid email format.</span>
+            </div>
+            <div class="form-group">
+              <label for="phoneNumber">Serial Number</label>
+              <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" [(ngModel)]="userDto.phoneNumber" required  #phoneNumber="ngModel"  [class.is-invalid] = "phoneNumber.invalid && phoneNumber.touched">
+              <span class="text-danger"
+              *ngIf="(phoneNumber.touched || userForm.submitted) && phoneNumber.errors?.['required']">
+              Phone Number is required
+          </span>
+            </div>
+            <div class="form-group">
+              <label for="userType">User Type</label>
+              <input type="text" class="form-control" id="userType" name="userType" [(ngModel)]="userDto.userType" required  #type="ngModel"  [class.is-invalid] = "type.invalid && type.touched">
+              <span class="text-danger"
+              *ngIf="(type.touched || userForm.submitted) && type.errors?.['required']">
+              User Type is required
+          </span>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary"  [disabled]="!userForm.valid">Save changes</button>
+            </div>
+          </form>        
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+  
+    <!-- Modal -->
+    <div class="modal fade" id="updateModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Update User Information</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form #userUpdateForm="ngForm" (ngSubmit)="updateUserInfo(updateUser.id, userUpdateForm)" novalidate>
+              <div class="form-group">
+                <label for="updateFullName">Full Name</label>
+                <input type="text" class="form-control" id="updateFullName" name="fullName" [(ngModel)]="updateUser.fullName"  #updateFullName="ngModel" required [class.is-invalid] = "updateFullName.invalid && updateFullName.touched">
+                <span class="text-danger"
+                *ngIf="(updateFullName.touched || userUpdateForm.submitted) && updateFullName.errors?.['required']">
+                FullName Name is required
+            </span>
+              </div>
+              <div class="form-group">
+                <label for="updateEmail">Email</label>
+                <input type="email" class="form-control" id="updateEmail" name="email" [(ngModel)]="updateUser.email" required  #updateEmail="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [class.is-invalid] = "updateEmail.invalid && updateEmail.touched">
+                <span class="text-danger"
+                *ngIf="(updateEmail.touched || userUpdateForm.submitted) && updateEmail.errors?.['required']">
+                Email is required
+            </span>
+            <span class="text-danger" *ngIf="updateEmail.errors?.['pattern']">Invalid email format.</span>
+              </div>
+              <div class="form-group">
+                <label for="updatePhoneNumber">Phone Number</label>
+                <input type="text" class="form-control" id="updatePhoneNumber" name="phoneNumber" [(ngModel)]="updateUser.phoneNumber" required  #updatePhoneNumber="ngModel"  [class.is-invalid] = "updatePhoneNumber.invalid && updatePhoneNumber.touched">
+                <span class="text-danger"
+                *ngIf="(updatePhoneNumber.touched || userUpdateForm.submitted) && updatePhoneNumber.errors?.['required']">
+                Phone Number is required
+            </span>
+              </div>
+              <div class="form-group">
+                <label for="updateUserType">User Type</label>
+                <input type="text" class="form-control" id="updateUserType" name="userType" [(ngModel)]="updateUser.userType" required  #updateUserType="ngModel"  [class.is-invalid] = "updateUserType.invalid && updateUserType.touched">
+                <span class="text-danger"
+                *ngIf="(updateUserType.touched || userUpdateForm.submitted) && updateUserType.errors?.['required']">
+                User Type is required
+            </span>
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary"  [disabled]="!userUpdateForm.valid">Save changes</button>
+              </div>
+            </form>        
+          </div>
+        </div>
+      </div>
+    </div> 
+  
+    
